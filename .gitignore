@@ -5,3 +5,4 @@ env/
 fetch_channel_id.py
 Ids.txt
 fetch300.py
+alert_session.session
