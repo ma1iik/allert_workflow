@@ -48,7 +48,7 @@ tickers_db = "identifiers.txt"
 def load_tickers():
     if os.path.exists(tickers_db):
         with open(tickers_db, "r") as file:
-            return set(line.strip().upper() for line in file)  # Normalize to uppercase
+            return set(line.strip().upper() for line in file)
     return set()
 
 
@@ -63,14 +63,13 @@ tickers_set = load_tickers()
 def analyze_message_with_gpt(message_text):
     print(f"🧠 Analyzing message with GPT: '{message_text}'")
     try:
-        # Load the system prompt from the .env file
-        system_prompt_content = system_prompt  # Loaded from os.getenv earlier
+        system_prompt_content = system_prompt
         response = openai_client.chat.completions.create(
             model="gpt-3.5-turbo",
             messages=[
                 {
                     "role": "system",
-                    "content": system_prompt_content,  # Use the prompt from the .env file
+                    "content": system_prompt_content,
                 },
                 {"role": "user", "content": message_text},
             ],
@@ -111,15 +110,15 @@ async def send_to_phanes_and_wait(data):
 
 def trigger_phone_call(message_text):
     print(f"📞 Triggering phone call for message: '{message_text}'")
-    # try:
-    #     call = twilio_client.calls.create(
-    #         to=your_phone_number,
-    #         from_=twilio_phone_number,
-    #         twiml=f'<Response><Say>New related message detected: {message_text}</Say></Response>',
-    #     )
-    #     print(f"✅ Call initiated successfully! Call SID: {call.sid}")
-    # except Exception as e:
-    #     print(f"❌ Error triggering phone call: {e}")
+    try:
+        call = twilio_client.calls.create(
+            to=your_phone_number,
+            from_=twilio_phone_number,
+            twiml=f'<Response><Say>New related message detected: {message_text}</Say></Response>',
+        )
+        print(f"✅ Call initiated successfully! Call SID: {call.sid}")
+    except Exception as e:
+        print(f"❌ Error triggering phone call: {e}")
 
 
 @client.on(events.NewMessage(chats=[channel_id, user_id]))
